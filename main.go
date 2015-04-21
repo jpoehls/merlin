@@ -74,6 +74,7 @@ func (c *Command) Runnable() bool {
 var commands = []*Command{
 	cmdCallConduit,
 	cmdPaste,
+	cmdVersion,
 
 	helpCert,
 }
