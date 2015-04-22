@@ -1,6 +1,9 @@
 package main
 
 import (
+	// TODO: Temporary. Remove when we get proper ~/.merrc support.
+	_ "github.com/codegangsta/envy/autoload"
+
 	"flag"
 	"fmt"
 	"io"

@@ -1,6 +1,3 @@
 #!/bin/sh
 
-go build -o mer
-golint ./
-go vet ./
-go test
+go build -o mer && go vet ./ && golint ./ && go test

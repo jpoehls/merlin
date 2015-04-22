@@ -1,13 +1,16 @@
 package main
 
 import (
-	"fmt"
+	"io/ioutil"
+	"os"
+	"poehls.me/go-conduit"
+	"strconv"
 )
 
 var cmdPaste = &Command{
 	UsageLines: []string{
-		"paste id [--json]",
-		"paste [--title title] [--lang language] [--json]",
+		"paste id",
+		"paste [--title title] [--lang language]",
 	},
 	Short: "retrieves or shares text using the Paste application",
 	Long: `
@@ -20,13 +23,10 @@ To retrieve a paste, specify the paste ID:
 
   $ mer paste P123
 
---json
-    Output in JSON format.
-
---lang language
+-lang language
     Language for syntax highlighting.
 
---title title
+-title title
     Title for the paste.
 `,
 }
@@ -35,13 +35,71 @@ func init() {
 	cmdPaste.Run = runPaste // break init cycle
 }
 
-var pasteID = cmdPaste.Flag.Uint64("id", 0, "")
 var pasteJSON = cmdPaste.Flag.Bool("json", false, "")
 var pasteTitle = cmdPaste.Flag.String("title", "", "")
 var pasteLang = cmdPaste.Flag.String("lang", "", "")
 
 func runPaste(cmd *Command, args []string) {
-	// TODO: implement what we claim to do
+	if len(args) > 0 {
+		id, err := strconv.ParseUint(args[0], 10, 64)
+		if err != nil {
+			fatalf("id must be a number: %v", err)
+		}
 
-	fmt.Printf("ID: %d\n", *pasteID)
+		if id != 0 {
+			paste := getPaste(id)
+			writePaste(paste)
+		}
+
+		return
+	}
+
+	bytes, err := ioutil.ReadAll(os.Stdin)
+	if err != nil {
+		fatalf("error reading stdin: %v", err)
+	}
+
+	paste := createPaste(bytes)
+	writePaste(paste)
+}
+
+func getPaste(id uint64) *conduit.PasteItem {
+	conn := openConduit()
+	qresp, err := conn.PasteQuery(&conduit.PasteQueryParams{
+		IDs: []uint64{1},
+	})
+	if err != nil {
+		fatalf("error getting pastes: %v", err)
+	}
+
+	if len(qresp) == 0 {
+		fatalf("paste not found")
+	}
+
+	return qresp[0]
+}
+
+func createPaste(bytes []byte) *conduit.PasteItem {
+	conn := openConduit()
+	params := &conduit.PasteCreateParams{
+		Content: string(bytes),
+	}
+	if *pasteTitle != "" {
+		params.Title = *pasteTitle
+	}
+	if *pasteLang != "" {
+		params.Language = *pasteLang
+	}
+	paste, err := conn.PasteCreate(params)
+	if err != nil {
+		fatalf("error creating paste: %v", err)
+	}
+
+	return paste
+}
+
+func writePaste(p *conduit.PasteItem) {
+	if _, err := os.Stdout.WriteString("Pasted as " + p.ObjectName + "\n" + p.URI + "\n"); err != nil {
+		fatalf("error writing paste to stdout: %v", err)
+	}
 }
