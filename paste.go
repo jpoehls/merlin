@@ -10,7 +10,7 @@ import (
 var cmdPaste = &Command{
 	UsageLines: []string{
 		"paste id",
-		"paste [--title title] [--lang language]",
+		"paste [-title title] [-lang language]",
 	},
 	Short: "retrieves or shares text using the Paste application",
 	Long: `
