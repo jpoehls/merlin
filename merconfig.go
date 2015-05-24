@@ -7,29 +7,27 @@ import (
 	"path/filepath"
 )
 
-type merrc struct {
-	Hosts map[string]*merrcHost `json:"hosts"`
+type merconfig struct {
+	PhabricatorURI string `json:"phabricator.uri"`
 }
 
-type merrcHost struct {
-	User string `json:"user"`
-	Cert string `json:"cert"`
-}
-
-func merrcPath() string {
-	home := os.Getenv("HOME")
-	p := filepath.Join(home, ".merrc")
+func merconfigPath() string {
+	wd, err := os.Getwd()
+	if err != nil {
+		fatalf("error getting pwd: %s", err)
+	}
+	p := filepath.Join(wd, ".merconfig")
 	return p
 }
 
-func openMerrc() *merrc {
-	p := merrcPath()
+func openMerconfig() *merconfig {
+	p := merconfigPath()
 	f, err := ioutil.ReadFile(p)
 	if err != nil && !os.IsNotExist(err) {
 		fatalf("error reading %s: %s", p, err)
 	}
 
-	var o merrc
+	var o merconfig
 	err = json.Unmarshal(f, &o)
 	if err != nil {
 		fatalf("error parsing %s: %s", p, err)

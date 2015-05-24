@@ -6,6 +6,9 @@ import (
 )
 
 func openConduit() *conduit.Conn {
+	// TODO: find .merconfig and get the "phabricator.uri"
+	// TODO: find the user/cert in .merrc that corresponds with the phabricator.uri we found
+
 	conn, err := conduit.Dial(os.Getenv("MER_HOST"))
 	if err != nil {
 		fatalf("error connecting to host: %v", err)
