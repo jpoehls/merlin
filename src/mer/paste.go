@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/jpoehls/go-conduit"
 	"io/ioutil"
 	"os"
-	"poehls.me/go-conduit"
 	"strconv"
 )
 

@@ -1,0 +1,17 @@
+{
+	"version": 0,
+	"dependencies": [
+		{
+			"importpath": "github.com/jpoehls/go-conduit",
+			"repository": "https://github.com/jpoehls/go-conduit",
+			"revision": "d066ad641e060e9c670eccef0f55e22b538bf25e",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/karlseguin/typed",
+			"repository": "https://github.com/karlseguin/typed",
+			"revision": "bd6be66c5bf456c20baa38c4dce153c47970fdb5",
+			"branch": "master"
+		}
+	]
+}

@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/jpoehls/go-conduit"
 	"os"
-	"poehls.me/go-conduit"
 )
 
 func openConduit() *conduit.Conn {

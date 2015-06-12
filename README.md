@@ -6,12 +6,10 @@ Merlin (or `mer`, the name of the executable) relies heavily on [go-conduit](htt
 
 [Documentation](http://godoc.org/github.com/jpoehls/go-conduit)
 
-# Installation
+# Building
 
-Assuming you have a working Go environment and `GOPATH/bin` is in your `PATH`, `mer` is a breeze to install:
+Install [gb](http://getgb.io).
 
-`go get poehls.me/merlin`
+	go get github.com/constabulary/gb/...
 
-Then verify that `mer` was installed correctly:
-
-`mer -h`
+Then build with `gb build` and grab the `bin\mer` executable.
